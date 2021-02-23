@@ -1,56 +1,57 @@
 "use strict";
 
-
 let randomNumber = Math.trunc(Math.random() * 20) + 1;
 let score = 20;
+let highScore = 0;
+
+const displayMessage = function (message) {
+  document.querySelector(".message").textContent = message;
+};
+
+const displayScore = function (score){
+  document.querySelector(".score").textContent = score
+}
 
 document.querySelector(".check").addEventListener("click", function () {
   const guess = Number(document.querySelector(".guess").value);
+  
   // when there is not input
   if (!guess) {
-    document.querySelector(".message").textContent = "No Number ⛔!";
+    displayMessage("No Number ⛔!");
 
     // when the player wins
   } else if (guess === randomNumber) {
-    document.querySelector(".message").textContent = "Congrats you Win 😁!";
+    displayMessage("Congrats you Win 😁!");
     document.querySelector("body").style.backgroundColor = "#60b347";
     document.querySelector(".number").style.width = "30rem";
     document.querySelector(".number").textContent = randomNumber;
-
-    // when the guess is higher than the random numer
-  } else if (guess > randomNumber) {
-    if (score > 1) {
-      document.querySelector(".message").textContent = "Go down 📉 ";
-      score--;
-      document.querySelector(".score").textContent = score;
-    } else {
-      document.querySelector(".message").textContent = "You lost the game 😭 ";
-      document.querySelector(".score").textContent = 0;
+    if (score > highScore) {
+      highScore = score;
+      document.querySelector(".highscore").textContent = highScore;
     }
 
-    // when the guess is smaller than the random numer
-  } else if (guess < randomNumber) {
+    // when the player guess a different number
+  } else if (guess !== randomNumber) {
     if (score > 1) {
-      document.querySelector(".message").textContent = "Go up 📈";
+     displayMessage (guess > randomNumber ? "Go down 📉 " : "Go up 📈");
       score--;
-      document.querySelector(".score").textContent = score;
+      displayScore(score);
     } else {
-      document.querySelector(".message").textContent = "You lost the game 😭 ";
-      document.querySelector(".score").textContent = 0;
-    }
+     displayMessage ("You lost the game 😭 ");
+     displayScore(0);
+   }
   }
 });
 
-
-//play again selector 
-document.querySelector('.again').addEventListener('click', function (){
+//play again selector
+document.querySelector(".again").addEventListener("click", function () {
   //location.reload()
   score = 20;
   randomNumber = Math.trunc(Math.random() * 20) + 1;
-  document.querySelector(".message").textContent = 'Start guessing...'
-  document.querySelector(".score").textContent = score
-  document.querySelector(".number").textContent = '?';
-  document.querySelector(".guess").value = '';
-  document.querySelector("body").style.backgroundColor = "#222"
+   displayMessage ("Start guessing...");
+   displayScore(score);
+  document.querySelector(".number").textContent = "?";
+  document.querySelector(".guess").value = "";
+  document.querySelector("body").style.backgroundColor = "#222";
   document.querySelector(".number").style.width = "15rem";
-})
+});
